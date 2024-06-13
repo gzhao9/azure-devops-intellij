@@ -303,19 +303,19 @@ public class LookupHelperTests extends IdeaAbstractTest {
         verify(loginPageModel).addError(Mockito.any(ModelValidationInfo.class));
         verify(loginPageModel).signOut();
     }
-    AuthenticationProvider createMockAuthenticationProvider(String serverUrl, boolean Auth){
+    public final AuthenticationProvider createMockAuthenticationProvider(String serverUrl, boolean Auth){
         AuthenticationProvider authenticationProvider = Mockito.mock(AuthenticationProvider.class);
         when(authenticationProvider.isAuthenticated(serverUrl)).thenReturn(Auth);
         doNothing().when(authenticationProvider).authenticateAsync(anyString(), any(AuthenticationListener.class));
         return authenticationProvider;
     }
-    AuthenticationProvider createMockAuthenticationProvider(String serverUrl, boolean Auth, AuthenticationInfo authInfo){
+    public final AuthenticationProvider createMockAuthenticationProvider(String serverUrl, boolean Auth, AuthenticationInfo authInfo){
         AuthenticationProvider authenticationProvider = Mockito.mock(AuthenticationProvider.class);
         when(authenticationProvider.isAuthenticated(serverUrl)).thenReturn(Auth);
         when(authenticationProvider.getAuthenticationInfo(serverUrl)).thenReturn(authInfo);
         return authenticationProvider;
     }
-    LoginPageModel createMockLoginPageModel(String serverUrl){
+    public final LoginPageModel createMockLoginPageModel(String serverUrl){
         LoginPageModel loginPageModel = Mockito.mock(LoginPageModel.class);
         when(loginPageModel.getServerName()).thenReturn(serverUrl);
         return loginPageModel;
