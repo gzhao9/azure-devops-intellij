@@ -59,8 +59,7 @@ public class LookupHelperTests extends IdeaAbstractTest {
 
     @Test
     public void testAuthenticateAndLoadTfsContexts_nullServerUrl() {
-        final LoginPageModel loginPageModel = Mockito.mock(LoginPageModel.class);
-        when(loginPageModel.getServerName()).thenReturn(null);
+        final LoginPageModel loginPageModel = createMockLoginPageModel(null);
         final ServerContextLookupPageModel lookupPageModel = Mockito.mock(ServerContextLookupPageModel.class);
         final AuthenticationProvider authenticationProvider = Mockito.mock(AuthenticationProvider.class);
         final ServerContextLookupListener lookupListener = Mockito.mock(ServerContextLookupListener.class);
@@ -74,8 +73,7 @@ public class LookupHelperTests extends IdeaAbstractTest {
 
     @Test
     public void testAuthenticateAndLoadTfsContexts_emptyServerUrl() {
-        final LoginPageModel loginPageModel = Mockito.mock(LoginPageModel.class);
-        when(loginPageModel.getServerName()).thenReturn("");
+        final LoginPageModel loginPageModel = createMockLoginPageModel("");
         final ServerContextLookupPageModel lookupPageModel = Mockito.mock(ServerContextLookupPageModel.class);
         final AuthenticationProvider authenticationProvider = Mockito.mock(AuthenticationProvider.class);
         final ServerContextLookupListener lookupListener = Mockito.mock(ServerContextLookupListener.class);
@@ -89,8 +87,7 @@ public class LookupHelperTests extends IdeaAbstractTest {
 
     @Test
     public void testAuthenticateAndLoadTfsContexts_invalidServerUrl() {
-        final LoginPageModel loginPageModel = Mockito.mock(LoginPageModel.class);
-        when(loginPageModel.getServerName()).thenReturn("not_valid_url");
+        final LoginPageModel loginPageModel = createMockLoginPageModel("not_valid_url");
         final ServerContextLookupPageModel lookupPageModel = Mockito.mock(ServerContextLookupPageModel.class);
         final AuthenticationProvider authenticationProvider = Mockito.mock(AuthenticationProvider.class);
         final ServerContextLookupListener lookupListener = Mockito.mock(ServerContextLookupListener.class);
@@ -107,12 +104,9 @@ public class LookupHelperTests extends IdeaAbstractTest {
         final ServerContextLookupOperation.ContextScope scope = ServerContextLookupOperation.ContextScope.REPOSITORY;
         final String serverUrl = "http://server:8080/tfs";
         final AuthenticationInfo authInfo = new AuthenticationInfo("user1", "pass1", serverUrl, "userOne");
-        final LoginPageModel loginPageModel = Mockito.mock(LoginPageModel.class);
-        when(loginPageModel.getServerName()).thenReturn(serverUrl);
+        final LoginPageModel loginPageModel = createMockLoginPageModel(serverUrl);
         final ServerContextLookupPageModel lookupPageModel = Mockito.mock(ServerContextLookupPageModel.class);
-        final AuthenticationProvider authenticationProvider = Mockito.mock(AuthenticationProvider.class);
-        when(authenticationProvider.isAuthenticated(serverUrl)).thenReturn(true);
-        when(authenticationProvider.getAuthenticationInfo(serverUrl)).thenReturn(authInfo);
+        final AuthenticationProvider authenticationProvider = createMockAuthenticationProvider(serverUrl,true, authInfo);
         final ServerContextLookupListener lookupListener = Mockito.mock(ServerContextLookupListener.class);
 
         LookupHelper.authenticateAndLoadTfsContexts(loginPageModel, lookupPageModel,
@@ -128,12 +122,9 @@ public class LookupHelperTests extends IdeaAbstractTest {
         final ServerContextLookupOperation.ContextScope scope = ServerContextLookupOperation.ContextScope.REPOSITORY;
         final String serverUrl = "http://server:8080/tfs";
         final AuthenticationInfo authInfo = new AuthenticationInfo("user1", "pass1", serverUrl, "userOne");
-        final LoginPageModel loginPageModel = Mockito.mock(LoginPageModel.class);
-        when(loginPageModel.getServerName()).thenReturn(serverUrl);
+        final LoginPageModel loginPageModel = createMockLoginPageModel(serverUrl);
         final ServerContextLookupPageModel lookupPageModel = Mockito.mock(ServerContextLookupPageModel.class);
-        final AuthenticationProvider authenticationProvider = Mockito.mock(AuthenticationProvider.class);
-        when(authenticationProvider.isAuthenticated(serverUrl)).thenReturn(false);
-        doNothing().when(authenticationProvider).authenticateAsync(anyString(), any(AuthenticationListener.class));
+        final AuthenticationProvider authenticationProvider = createMockAuthenticationProvider(serverUrl, false);
         final ServerContextLookupListener lookupListener = Mockito.mock(ServerContextLookupListener.class);
 
         ArgumentCaptor<AuthenticationListener> captor = ArgumentCaptor.forClass(AuthenticationListener.class);
@@ -156,12 +147,9 @@ public class LookupHelperTests extends IdeaAbstractTest {
         final ServerContextLookupOperation.ContextScope scope = ServerContextLookupOperation.ContextScope.REPOSITORY;
         final String serverUrl = "http://server:8080/tfs";
         final AuthenticationInfo authInfo = new AuthenticationInfo("user1", "pass1", serverUrl, "userOne");
-        final LoginPageModel loginPageModel = Mockito.mock(LoginPageModel.class);
-        when(loginPageModel.getServerName()).thenReturn(serverUrl);
+        final LoginPageModel loginPageModel = createMockLoginPageModel(serverUrl);
         final ServerContextLookupPageModel lookupPageModel = Mockito.mock(ServerContextLookupPageModel.class);
-        final AuthenticationProvider authenticationProvider = Mockito.mock(AuthenticationProvider.class);
-        when(authenticationProvider.isAuthenticated(serverUrl)).thenReturn(false);
-        doNothing().when(authenticationProvider).authenticateAsync(anyString(), any(AuthenticationListener.class));
+        final AuthenticationProvider authenticationProvider = createMockAuthenticationProvider(serverUrl, false);
         final ServerContextLookupListener lookupListener = Mockito.mock(ServerContextLookupListener.class);
 
         ArgumentCaptor<AuthenticationListener> captor = ArgumentCaptor.forClass(AuthenticationListener.class);
@@ -184,12 +172,9 @@ public class LookupHelperTests extends IdeaAbstractTest {
         final ServerContextLookupOperation.ContextScope scope = ServerContextLookupOperation.ContextScope.REPOSITORY;
         final String serverUrl = "http://server:8080/tfs";
         final AuthenticationInfo authInfo = new AuthenticationInfo("user1", "pass1", serverUrl, "userOne");
-        final LoginPageModel loginPageModel = Mockito.mock(LoginPageModel.class);
-        when(loginPageModel.getServerName()).thenReturn(serverUrl);
+        final LoginPageModel loginPageModel = createMockLoginPageModel(serverUrl);
         final ServerContextLookupPageModel lookupPageModel = Mockito.mock(ServerContextLookupPageModel.class);
-        final AuthenticationProvider authenticationProvider = Mockito.mock(AuthenticationProvider.class);
-        when(authenticationProvider.isAuthenticated(serverUrl)).thenReturn(false);
-        doNothing().when(authenticationProvider).authenticateAsync(anyString(), any(AuthenticationListener.class));
+        final AuthenticationProvider authenticationProvider = createMockAuthenticationProvider(serverUrl, false);
         final ServerContextLookupListener lookupListener = Mockito.mock(ServerContextLookupListener.class);
 
         ArgumentCaptor<AuthenticationListener> captor = ArgumentCaptor.forClass(AuthenticationListener.class);
@@ -212,12 +197,9 @@ public class LookupHelperTests extends IdeaAbstractTest {
         final ServerContextLookupOperation.ContextScope scope = ServerContextLookupOperation.ContextScope.REPOSITORY;
         final String serverUrl = "http://test.visualstudio.com";
         final AuthenticationInfo authInfo = new AuthenticationInfo("user1", "pass1", serverUrl, "userOne");
-        final LoginPageModel loginPageModel = Mockito.mock(LoginPageModel.class);
-        when(loginPageModel.getServerName()).thenReturn(serverUrl);
+        final LoginPageModel loginPageModel = createMockLoginPageModel(serverUrl);
         final ServerContextLookupPageModel lookupPageModel = Mockito.mock(ServerContextLookupPageModel.class);
-        final AuthenticationProvider authenticationProvider = Mockito.mock(AuthenticationProvider.class);
-        when(authenticationProvider.isAuthenticated(serverUrl)).thenReturn(true);
-        when(authenticationProvider.getAuthenticationInfo(serverUrl)).thenReturn(authInfo);
+        final AuthenticationProvider authenticationProvider = createMockAuthenticationProvider(serverUrl,true, authInfo);
         final ServerContextLookupListener lookupListener = Mockito.mock(ServerContextLookupListener.class);
 
         LookupHelper.authenticateAndLoadVsoContexts(loginPageModel, lookupPageModel,
@@ -233,12 +215,9 @@ public class LookupHelperTests extends IdeaAbstractTest {
         final ServerContextLookupOperation.ContextScope scope = ServerContextLookupOperation.ContextScope.REPOSITORY;
         final String serverUrl = "http://server:8080/tfs";
         final AuthenticationInfo authInfo = new AuthenticationInfo("user1", "pass1", serverUrl, "userOne");
-        final LoginPageModel loginPageModel = Mockito.mock(LoginPageModel.class);
-        when(loginPageModel.getServerName()).thenReturn(serverUrl);
+        final LoginPageModel loginPageModel = createMockLoginPageModel(serverUrl);
         final ServerContextLookupPageModel lookupPageModel = Mockito.mock(ServerContextLookupPageModel.class);
-        final AuthenticationProvider authenticationProvider = Mockito.mock(AuthenticationProvider.class);
-        when(authenticationProvider.isAuthenticated(serverUrl)).thenReturn(true);
-        when(authenticationProvider.getAuthenticationInfo(serverUrl)).thenReturn(authInfo);
+        final AuthenticationProvider authenticationProvider = createMockAuthenticationProvider(serverUrl,true, authInfo);
         final ServerContextLookupListener lookupListener = Mockito.mock(ServerContextLookupListener.class);
 
         LookupHelper.authenticateAndLoadVsoContexts(loginPageModel, lookupPageModel,
@@ -255,12 +234,9 @@ public class LookupHelperTests extends IdeaAbstractTest {
         final ServerContextLookupOperation.ContextScope scope = ServerContextLookupOperation.ContextScope.REPOSITORY;
         final String serverUrl = "http://server:8080/tfs";
         final AuthenticationInfo authInfo = new AuthenticationInfo("user1", "pass1", serverUrl, "userOne");
-        final LoginPageModel loginPageModel = Mockito.mock(LoginPageModel.class);
-        when(loginPageModel.getServerName()).thenReturn(serverUrl);
+        final LoginPageModel loginPageModel = createMockLoginPageModel(serverUrl);
         final ServerContextLookupPageModel lookupPageModel = Mockito.mock(ServerContextLookupPageModel.class);
-        final AuthenticationProvider authenticationProvider = Mockito.mock(AuthenticationProvider.class);
-        when(authenticationProvider.isAuthenticated(serverUrl)).thenReturn(false);
-        doNothing().when(authenticationProvider).authenticateAsync(anyString(), any(AuthenticationListener.class));
+        final AuthenticationProvider authenticationProvider = createMockAuthenticationProvider(serverUrl, false);
         final ServerContextLookupListener lookupListener = Mockito.mock(ServerContextLookupListener.class);
 
         ArgumentCaptor<AuthenticationListener> captor = ArgumentCaptor.forClass(AuthenticationListener.class);
@@ -283,12 +259,9 @@ public class LookupHelperTests extends IdeaAbstractTest {
         final ServerContextLookupOperation.ContextScope scope = ServerContextLookupOperation.ContextScope.REPOSITORY;
         final String serverUrl = "http://server:8080/tfs";
         final AuthenticationInfo authInfo = new AuthenticationInfo("user1", "pass1", serverUrl, "userOne");
-        final LoginPageModel loginPageModel = Mockito.mock(LoginPageModel.class);
-        when(loginPageModel.getServerName()).thenReturn(serverUrl);
+        final LoginPageModel loginPageModel = createMockLoginPageModel(serverUrl);
         final ServerContextLookupPageModel lookupPageModel = Mockito.mock(ServerContextLookupPageModel.class);
-        final AuthenticationProvider authenticationProvider = Mockito.mock(AuthenticationProvider.class);
-        when(authenticationProvider.isAuthenticated(serverUrl)).thenReturn(false);
-        doNothing().when(authenticationProvider).authenticateAsync(anyString(), any(AuthenticationListener.class));
+        final AuthenticationProvider authenticationProvider = createMockAuthenticationProvider(serverUrl, false);
         final ServerContextLookupListener lookupListener = Mockito.mock(ServerContextLookupListener.class);
 
         ArgumentCaptor<AuthenticationListener> captor = ArgumentCaptor.forClass(AuthenticationListener.class);
@@ -311,12 +284,9 @@ public class LookupHelperTests extends IdeaAbstractTest {
         final ServerContextLookupOperation.ContextScope scope = ServerContextLookupOperation.ContextScope.REPOSITORY;
         final String serverUrl = "http://server:8080/tfs";
         final AuthenticationInfo authInfo = new AuthenticationInfo("user1", "pass1", serverUrl, "userOne");
-        final LoginPageModel loginPageModel = Mockito.mock(LoginPageModel.class);
-        when(loginPageModel.getServerName()).thenReturn(serverUrl);
+        final LoginPageModel loginPageModel = createMockLoginPageModel(serverUrl);
         final ServerContextLookupPageModel lookupPageModel = Mockito.mock(ServerContextLookupPageModel.class);
-        final AuthenticationProvider authenticationProvider = Mockito.mock(AuthenticationProvider.class);
-        when(authenticationProvider.isAuthenticated(serverUrl)).thenReturn(false);
-        doNothing().when(authenticationProvider).authenticateAsync(anyString(), any(AuthenticationListener.class));
+        final AuthenticationProvider authenticationProvider = createMockAuthenticationProvider(serverUrl, false);
         final ServerContextLookupListener lookupListener = Mockito.mock(ServerContextLookupListener.class);
 
         ArgumentCaptor<AuthenticationListener> captor = ArgumentCaptor.forClass(AuthenticationListener.class);
@@ -333,7 +303,23 @@ public class LookupHelperTests extends IdeaAbstractTest {
         verify(loginPageModel).addError(Mockito.any(ModelValidationInfo.class));
         verify(loginPageModel).signOut();
     }
-
+    AuthenticationProvider createMockAuthenticationProvider(String serverUrl, boolean Auth){
+        AuthenticationProvider authenticationProvider = Mockito.mock(AuthenticationProvider.class);
+        when(authenticationProvider.isAuthenticated(serverUrl)).thenReturn(Auth);
+        doNothing().when(authenticationProvider).authenticateAsync(anyString(), any(AuthenticationListener.class));
+        return authenticationProvider;
+    }
+    AuthenticationProvider createMockAuthenticationProvider(String serverUrl, boolean Auth, AuthenticationInfo authInfo){
+        AuthenticationProvider authenticationProvider = Mockito.mock(AuthenticationProvider.class);
+        when(authenticationProvider.isAuthenticated(serverUrl)).thenReturn(Auth);
+        when(authenticationProvider.getAuthenticationInfo(serverUrl)).thenReturn(authInfo);
+        return authenticationProvider;
+    }
+    LoginPageModel createMockLoginPageModel(String serverUrl){
+        LoginPageModel loginPageModel = Mockito.mock(LoginPageModel.class);
+        when(loginPageModel.getServerName()).thenReturn(serverUrl);
+        return loginPageModel;
+    } 
     private class MyAccountLookupOperation extends AccountLookupOperation {
         @Override
         public void doWorkAsync(Inputs inputs) {
